@@ -1,0 +1,39 @@
+~/workspace$ alembic init alembic
+  Creating directory /home/runner/workspace/alembic ...  done
+  Creating directory /home/runner/workspace/alembic/versions ...  done
+  Generating /home/runner/workspace/alembic/README ...  done
+  Generating /home/runner/workspace/alembic.ini ...  done
+  Generating /home/runner/workspace/alembic/env.py ...  done
+  Generating /home/runner/workspace/alembic/script.py.mako ...  done
+  Please edit configuration/connection/logging settings in
+  /home/runner/workspace/alembic.ini before proceeding.
+~/workspace$ ^C
+~/workspace$ ^M
+: command not found
+~/workspace$ 
+~/workspace$ alembic revision --autogenerate -m "create invoices table"
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/bin/alembic", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/config.py", line 1001, in main
+    CommandLine(prog=prog).main(argv=argv)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/config.py", line 991, in main
+    self.run_cmd(cfg, options)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/config.py", line 925, in run_cmd
+    fn(
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/command.py", line 309, in revision
+    script_directory.run_env()
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/script/base.py", line 551, in run_env
+    util.load_python_file(self.dir, "env.py")
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/util/pyfiles.py", line 116, in load_python_file
+    module = load_module_py(module_id, path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/alembic/util/pyfiles.py", line 136, in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/runner/workspace/alembic/env.py", line 8, in <module>
+    from models import Base
+ModuleNotFoundError: No module named 'models'
