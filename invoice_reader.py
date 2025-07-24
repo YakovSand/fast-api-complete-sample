@@ -4,6 +4,11 @@ import base64
 from dotenv import load_dotenv
 import openai
 
+from db import *
+from models import Invoice
+from aws_file_utils import *
+from sqlalchemy.orm import Session
+
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -52,9 +57,30 @@ def analyze_invoice_url(image_url: str):
     result = ask_openai_about_invoice(base64_img)
     return result
 
+def save_invoice_to_db(data: dict):
+    db = SessionLocal()
+    try:
+        invoice = Invoice(**data)
+        db.add(invoice)
+        db.commit()
+        db.refresh(invoice)
+        return invoice
+    except Exception as e:
+        db.rollback()
+        raise e
+    finally:
+        db.close()
+
+def get_user_invoices(user_id: int, db: Session):
+    invoices = db.query(Invoice).filter(Invoice.user_id == user_id).all()
+    for invoice in invoices:
+        if invoice.file_key:
+            invoice.presigned_url = get_presigned_url_from_key(invoice.file_key)
+    return invoices
+        
 # Example
 if __name__ == "__main__":
     image_url = "https://s3.amazonaws.com/thumbnails.venngage.com/template/f817aebd-2d8e-42cf-8c9f-80a234f077ea.png"  # Replace with your image URL
     result = analyze_invoice_url(image_url)
     print(result)
-    
+
